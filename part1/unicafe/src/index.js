@@ -10,7 +10,7 @@ const Button = ({onClick, text}) => (
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
 
-  if (all == 0){
+  if (all === 0){
     return (
       <div>
         <p>No feedback given</p>
@@ -21,17 +21,22 @@ const Statistics = ({good, neutral, bad}) => {
   return (
     <div>
       <h2>statistics</h2>
-      <Statistic text="good" value={good} />
-      <Statistic text="neutral" value={neutral} />
-      <Statistic text="bad" value={bad} />
-      <Statistic text="all" value={all} />
-      <Statistic text="average" value={(good-bad)/all} />
-      <Statistic text="positive" value={(good)*100/(all)} />
+      <table>
+        <tbody>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={all} />
+          <Statistic text="average" value={(good-bad)/all}/>
+          <Statistic text="positive" value={(good)*100/(all)}/>
+        </tbody>   
+      </table>
+      
     </div>
   )
 }
 
-const Statistic = ({text, value}) => (<div><p>{text} {value}</p></div>)
+const Statistic = ({text, value}) => (<tr><td>{text}</td><td>{value}</td></tr>)
 
 const App = () => {
   const [good, setGood] = useState(0)
