@@ -11,7 +11,18 @@ const Button = ({onClick, text}) =>{
   )
 }
 
+function indexMax(arr) {
+  let max = arr[0]
+  let idxMax = 0;
 
+  for (var i = 1; i < arr.length; i++){
+    if (arr[i] > max){
+      max = arr[i]
+      idxMax = i
+    }
+  }
+  return idxMax
+}
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
@@ -19,22 +30,24 @@ const App = (props) => {
 
   const nextAnecdote = () => {
     setSelected(Math.floor(Math.random() * 6))
-    console.log(selected)
   }
 
   const voteAnecdote = () => {
-    const copy = {...points}
+    let copy = [...points]
     copy[selected] += 1
     setPoints(copy)
   }
 
   return (
     <div>
-      {console.log(selected)}
+      <h1>Anecdote of the day</h1>
       {props.anecdotes[selected]}
       <p>has {points[selected]} votes </p>
       <Button onClick={voteAnecdote} text="vote"/>
       <Button onClick={nextAnecdote} text="next anecdote"/>
+      <h1>Anecdote with most votes</h1>
+      {props.anecdotes[indexMax(points)]}
+      <p>has {points[indexMax(points)]} </p>
     </div>
   )
 }
