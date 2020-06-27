@@ -6,20 +6,19 @@ import Persons from './components/Persons'
 
 const App = () => {
     const [persons, setPersons] = useState([])
-    
-    useEffect(() => {
-        console.log('effect')
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
-                console.log('promise fulfilled')
-                setPersons(response.data)
-            })
-    }, [])
-
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
+
+        
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/persons')
+            .then(response => {
+                setPersons(response.data)
+            })
+    }, [])
+    console.log('render', persons.length, 'contacts')
 
     const addPerson = (event) => {
         event.preventDefault()
