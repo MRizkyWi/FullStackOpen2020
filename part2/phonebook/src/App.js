@@ -3,6 +3,11 @@ import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import Persons from './components/Persons'
 import PersonService from './services/persons'
+import Notification from './components/Notification'
+import './index.css'
+
+//! start database
+//! run "npm run server"
 
 const App = () => {
 
@@ -11,6 +16,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
+    const [message, setMessage] = useState(null)
         
     //* Init phonebook
     useEffect(() => {
@@ -40,6 +46,11 @@ const App = () => {
             
             setNewName('')
             setNewNumber('')
+
+            setMessage(`${newPerson.name} added`)
+            setTimeout(() => {
+                setMessage(null)
+            }, 5000)
         } else {
             if (window.confirm(newName + ' is already added to phonebook. replace old number with new one?')){
                 updatePerson(newName, newNumber)
@@ -88,7 +99,8 @@ const App = () => {
     //* return 
     return (
         <div>
-            <h2>Phonebook</h2>
+            <h1>Phonebook</h1>
+            <Notification message = {message} />
             <Filter filter={filter} onChange={handleFilter}/>
             <h3>New contact</h3>
             <ContactForm 
