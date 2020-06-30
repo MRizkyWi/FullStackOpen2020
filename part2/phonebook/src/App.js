@@ -17,6 +17,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
     const [message, setMessage] = useState(null)
+    const [messageType, setMessageType] = useState(null)
         
     //* Init phonebook
     useEffect(() => {
@@ -42,15 +43,13 @@ const App = () => {
             
             PersonService
                 .create(newPerson)
-                .then(newPersons => setPersons(persons.concat(newPersons)))
+                .then(newPersons => {
+                    setPersons(persons.concat(newPersons))
+                    makeMessage(`${newPerson.name} added`, 1)
+                })
             
             setNewName('')
             setNewNumber('')
-
-            setMessage(`${newPerson.name} added`)
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
         } else {
             if (window.confirm(newName + ' is already added to phonebook. replace old number with new one?')){
                 updatePerson(newName, newNumber)
@@ -67,7 +66,13 @@ const App = () => {
             .update(person.id, changedPerson)
             .then(returnedPerson => {
                 setPersons(persons.map(p => p.id !== person.id ? p: returnedPerson))
+                makeMessage(`${person.name} phone number updated`, 1)
             })
+            .catch(error => {
+                makeMessage(`${person.name} not found in phonebook`, 0)
+                setPersons(persons.filter(p => p.id !== person.id))
+            })
+            
     }
 
     //* Delete contact
@@ -81,6 +86,16 @@ const App = () => {
                     setPersons(persons.filter(p => p.id !== id))
                 )
         }
+    }
+
+    //* Generate message
+    const makeMessage = (messageNew, messageTypeNew) => {
+        setMessage(messageNew)
+        setMessageType(messageTypeNew)
+
+        setTimeout(() => {
+            setMessage(null)
+        }, 5000)
     }
 
     //* Handler 
@@ -100,7 +115,7 @@ const App = () => {
     return (
         <div>
             <h1>Phonebook</h1>
-            <Notification message = {message} />
+            <Notification message={message} messageType={messageType}/>
             <Filter filter={filter} onChange={handleFilter}/>
             <h3>New contact</h3>
             <ContactForm 
