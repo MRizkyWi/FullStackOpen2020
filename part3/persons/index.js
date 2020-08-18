@@ -24,7 +24,29 @@ let persons = [
     },
 ]
 
+const countPersons = () => {
+    return persons.length
+}
+
+const generateId = () => {
+    const maxId = countPersons > 0
+        ? Math.max(...persons.map(p => p.id))
+        : 0
+    return maxId + 1
+}
+
+app.get('/info', (request, response) => {
+    
+    var now = new Date;
+   
+    response.send('<p>Phonebook has info for '+ countPersons() + ' people </p><p>'+ now.toString() + '</p>')
+  })
+
 app.get('/api/persons', (request, response) => {
+    response.json(persons)
+})
+
+app.get('/info', (request, response) => {
     response.json(persons)
 })
 
