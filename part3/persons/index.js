@@ -69,7 +69,19 @@ app.post('/api/persons', (request, response) => {
 
     if (!body.name){
         return response.status(400).json({
-            error: 'missing content'
+            error: 'missing name'
+        })
+    } else if (!body.number){
+        return response.status(400).json({
+            error: 'missing number'
+        })
+    }
+
+    const findPerson = persons.find(person => person.name === body.name)
+
+    if (findPerson){
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
@@ -78,6 +90,7 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
         id: generateId()
     }
+
 
     persons = persons.concat(person)
 
