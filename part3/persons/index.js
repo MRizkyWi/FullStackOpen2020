@@ -25,16 +25,14 @@ let persons = [
     },
 ]
 
-const countPersons = () => {
-    return persons.length
-}
-
 const generateId = () => {
-    const maxId = countPersons > 0
+    const maxId = persons.length > 0
         ? Math.max(...persons.map(p => p.id))
         : 0
     return maxId + 1
 }
+
+app.use(express.json())
 
 app.get('/info', (request, response) => {
     
@@ -49,10 +47,8 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    // console.log("id: ", id)
     
     const person = persons.find(person => person.id === id)
-    // console.log(person.name)
 
     if (person){
         response.json(person)
@@ -66,7 +62,27 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
   
     response.status(204).end()
-  })
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name){
+        return response.status(400).json({
+            error: 'missing content'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
