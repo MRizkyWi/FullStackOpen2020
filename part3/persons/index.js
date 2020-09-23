@@ -1,3 +1,5 @@
+// link: https://nameless-peak-80192.herokuapp.com/
+
 const express = require('express')
 const { request } = require('express')
 const app = express()
@@ -32,6 +34,7 @@ morgan.token('body', (req, res) => {
 })
 
 app.use(express.json())
+app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
 
@@ -46,7 +49,7 @@ app.get('/info', (request, response) => {
     
     var now = new Date;
    
-    response.send('<p>Phonebook has info for '+ countPersons() + ' people </p><p>'+ now.toString() + '</p>')
+    response.send('<p>Phonebook has info for '+ persons.length + ' people </p><p>'+ now.toString() + '</p>')
 })
 
 app.get('/api/persons', (request, response) => {
@@ -57,7 +60,6 @@ app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     
     const person = persons.find(person => person.id === id)
-
     if (person){
         response.json(person)
     } else {
