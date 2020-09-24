@@ -18,8 +18,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 // determine database schema of Person
 const personSchema = new mongoose.Schema({
   name: String,
-  number: String,
-  id: Number,
+  number: String
 })
 
 const Person = mongoose.model('Person', personSchema)
@@ -29,20 +28,10 @@ if (process.argv.length >= 4){
     const name = process.argv[3]
     const number = process.argv[4]
 
-    // find largest id
-    let id = 1
-    Person.find({}).then(result => {
-        if (result.length != 0){
-            const varPerson = result[result.length - 1]
-            id = varPerson.id
-        }
-    })
-
     // make new person to add to database
     const person = new Person({
         name: name,
-        number: number,
-        id: id + 1,
+        number: number
     })
         
     person.save().then(result => {
