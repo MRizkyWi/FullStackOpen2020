@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+mongoose.set('useCreateIndex', true);
 var uniqueValidator = require('mongoose-unique-validator');
 
 const url = process.env.MONGODB_URI
